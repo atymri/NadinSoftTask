@@ -10,6 +10,7 @@ namespace ProductManager.Core.DTOs.ProductDTOs
 {
     public class ProductAddRequest
     {
+        public Guid ID { get; set; }
         [Required(ErrorMessage = "نام محصول نمیتواند خالی باشد")]
         [StringLength(50, ErrorMessage = "حداکثر کاراکتر های مجاز برای نام محصول 50 کاراکتر میباشد")]
         public string Name { get; set; } = string.Empty;

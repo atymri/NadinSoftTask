@@ -29,7 +29,7 @@ namespace ProductManager.Core.Helpers
         internal static void ValidateEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("Email cannot be empty or whitespace");
+                throw new ArgumentException("email address can not be null or whitespace");
             email = email.Trim();
 
             MailAddress mailAddress;
@@ -39,11 +39,11 @@ namespace ProductManager.Core.Helpers
             }
             catch (FormatException)
             {
-                throw new ArgumentException($"Invalid email format: {email}");
+                throw new ArgumentException($"is not in proper format: {email}");
             }
 
             if (mailAddress.Address != email)
-                throw new ArgumentException($"Invalid email address: {email}");
+                throw new ArgumentException($"is not a valid email: {email}");
 
             string domain = mailAddress.Host.ToLowerInvariant();
             var allowedDomains = new List<string>
@@ -55,7 +55,7 @@ namespace ProductManager.Core.Helpers
             };
 
             if (!allowedDomains.Contains(domain))
-                throw new ArgumentException($"Domain not allowed: {domain}");
+                throw new ArgumentException($"this domain is not supported by us: {domain}");
         }
     }
 }
