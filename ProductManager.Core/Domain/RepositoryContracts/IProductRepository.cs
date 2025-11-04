@@ -15,7 +15,9 @@ namespace ProductManager.Core.Domain.RepositoryContracts
         Task<List<Product>?> GetProductsByManufactureAsync(string? manufactureEmail);
         Task<bool> IsProductForManufactureAsync(string manufactureEmail, string manufacturePhone, Guid productId); // for delete, update and add.
         Task<Product?> AddProductAsync(Product product);
+        Task<List<Product>?> AddProducstAsync(List<Product> products);
         Task<Product?> UpdateProductAsync(Product product);
         Task<bool> DeleteProductAsync(Guid productId);
+        Task<bool> DeleteProductsAsync(List<Product> products);
     }
 }

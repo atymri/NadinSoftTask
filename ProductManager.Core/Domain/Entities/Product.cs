@@ -10,8 +10,8 @@ namespace ProductManager.Core.Domain.Entities
 {
     public class Product
     {
-        [Key]
-        public Guid ID { get; set; }
+        [Key] 
+        public Guid ID { get; set; } = Guid.NewGuid();
 
         [Required]
         [StringLength(50)] 
