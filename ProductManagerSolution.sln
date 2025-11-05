@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Core", "ProductManager.Core\ProductManager.Core.csproj", "{A43DF6BB-4006-46DC-8570-279B2FB59DD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManager.Infrastructure", "ProductManager.Infrastructure\ProductManager.Infrastructure.csproj", "{9FC3504E-95F0-4D55-91E6-C6A9E00AB625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A43DF6BB-4006-46DC-8570-279B2FB59DD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A43DF6BB-4006-46DC-8570-279B2FB59DD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A43DF6BB-4006-46DC-8570-279B2FB59DD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FC3504E-95F0-4D55-91E6-C6A9E00AB625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FC3504E-95F0-4D55-91E6-C6A9E00AB625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FC3504E-95F0-4D55-91E6-C6A9E00AB625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FC3504E-95F0-4D55-91E6-C6A9E00AB625}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
