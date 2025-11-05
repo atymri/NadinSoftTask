@@ -67,11 +67,12 @@ namespace ProductManager.Infrastructure.Repositories
         }
         public async Task<bool> DeleteProductAsync(Guid productId)
         {
-            var existingProduct = _context.Products.Find(productId);
+            var existingProduct = await _context.Products.FindAsync(productId);
             if (existingProduct == null) return false;
 
             _context.Products.Remove(existingProduct);
-            return await _context.SaveChangesAsync() > 0;
+            var rowsDeleted = await _context.SaveChangesAsync();
+            return rowsDeleted > 0;
         }
         public async Task<bool> DeleteProductsAsync(List<Product> products)
         {

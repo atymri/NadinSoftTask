@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using ProductManager.Core.Domain.Entities;
 using ProductManager.Core.Domain.RepositoryContracts;
 using ProductManager.Core.DTOs.ProductDTOs;

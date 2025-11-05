@@ -9,6 +9,7 @@ namespace ProductManager.Core.DTOs.ProductDTOs
 {
     public class ProductResponse
     {
+        public Guid ID { get; set; }
         public string? Name { get; set; }
         public DateTime? Date { get; set; }
         public string? ManufacturePhone { get; set; }
