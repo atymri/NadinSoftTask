@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ProductManager.API.Filters.ActionFilters;
 using ProductManager.Core.Domain.Entities;
 using ProductManager.Core.DTOs.UserDTOs;
 
@@ -65,5 +67,22 @@ namespace ProductManager.API.Controllers
             return Ok(userResponse);
 
         }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return NoContent();
+        }
+
+        [HttpGet("register-email-check")]
+        [TypeFilter(typeof(AjaxOnlyActionFilter))]
+        public async Task<IActionResult> IsEmailInUseForRegister(string email)
+            => Ok(await _userManager.FindByEmailAsync(email) == null);
+
+        [HttpGet("login-email-check")]
+        [TypeFilter(typeof(AjaxOnlyActionFilter))]
+        public async Task<IActionResult> IsEmailInUseForLogin(string email)
+            => Ok(await _userManager.FindByEmailAsync(email) != null);
     }
 }

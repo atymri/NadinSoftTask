@@ -17,7 +17,7 @@ namespace ProductManager.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<ProductResponse?> UpdateProductAsync(Guid productId, ProductAddRequest request)
+        public async Task<ProductResponse?> UpdateProductAsync(Guid productId, ProductUpdateRequest request)
         {
             if (productId != request.ID)
                 throw new ArgumentException($"آیدی {productId} برای محصول {request.Name} نیست");

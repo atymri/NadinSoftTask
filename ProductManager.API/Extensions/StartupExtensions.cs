@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProductManager.Core.Domain.Entities;
 using ProductManager.Core.Domain.RepositoryContracts;
@@ -48,7 +48,11 @@ namespace ProductManager.API.Extensions
                 options.LogoutPath = "/Account/Logout";
             });
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(new ProducesAttribute("application/json"));
+                options.Filters.Add(new ConsumesAttribute("application/json"));
+            });
 
             var connectionString = builder.Configuration.GetConnectionString("Default") ??
                                    throw new KeyNotFoundException("connection string is missing!!!!!");

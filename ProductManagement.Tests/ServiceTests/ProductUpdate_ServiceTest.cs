@@ -4,7 +4,6 @@ using ProductManager.Core.Domain.Entities;
 using ProductManager.Core.Domain.RepositoryContracts;
 using ProductManager.Core.DTOs.ProductDTOs;
 using ProductManager.Core.Services;
-using ProductManager.Core.Helpers;
 
 namespace ProductManager.Core.Tests.Services
 {
@@ -26,7 +25,7 @@ namespace ProductManager.Core.Tests.Services
         {
             // Arrange
             var productId = Guid.NewGuid();
-            var request = new ProductAddRequest
+            var request = new ProductUpdateRequest
             {
                 ID = productId,
                 Name = "Updated Product",
@@ -60,7 +59,7 @@ namespace ProductManager.Core.Tests.Services
             // Arrange
             var productId = Guid.NewGuid();
             var differentProductId = Guid.NewGuid();
-            var request = new ProductAddRequest
+            var request = new ProductUpdateRequest
             {
                 ID = differentProductId,
                 Name = "Test Product",
@@ -80,7 +79,7 @@ namespace ProductManager.Core.Tests.Services
         {
             // Arrange
             var productId = Guid.NewGuid();
-            var request = new ProductAddRequest
+            var request = new ProductUpdateRequest
             {
                 ID = productId,
                 Name = "", // Invalid - empty name
@@ -97,7 +96,7 @@ namespace ProductManager.Core.Tests.Services
         {
             // Arrange
             var productId = Guid.NewGuid();
-            var request = new ProductAddRequest
+            var request = new ProductUpdateRequest
             {
                 ID = productId,
                 Name = "Test Product",
@@ -114,7 +113,7 @@ namespace ProductManager.Core.Tests.Services
         {
             // Arrange
             var productId = Guid.NewGuid();
-            var request = new ProductAddRequest
+            var request = new ProductUpdateRequest
             {
                 ID = productId,
                 Name = "Test Product",
@@ -131,7 +130,7 @@ namespace ProductManager.Core.Tests.Services
         {
             // Arrange
             var productId = Guid.NewGuid();
-            var request = new ProductAddRequest
+            var request = new ProductUpdateRequest
             {
                 ID = productId,
                 Name = "Test Product",

@@ -9,6 +9,6 @@ namespace ProductManager.Core.ServiceContracts
 {
     public interface IProductUpdaterService
     {
-        Task<ProductResponse?> UpdateProductAsync(Guid productId, ProductAddRequest request);
+        Task<ProductResponse?> UpdateProductAsync(Guid productId, ProductUpdateRequest request);
     }
 }

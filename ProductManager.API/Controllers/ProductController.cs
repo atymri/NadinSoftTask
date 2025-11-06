@@ -36,6 +36,55 @@ namespace ProductManager.API.Controllers
             return Ok(product);
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult<ProductResponse>> PostProduct(ProductAddRequest request)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            if (request.ManufactureEmail != User.Identity.Name)
+                return Problem("شما فقط میتوانید برای خودتان محصول اضافه کنید",
+                    statusCode: StatusCodes.Status403Forbidden);
+
+            var res = await _productAdderService.AddProductAsync(request);
+            return Ok(res);
+        }
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ProductResponse>> PutProduct(ProductUpdateRequest request, Guid id)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            if (request.ManufactureEmail != User.Identity.Name)
+                return Problem("شما فقط میتوانید محصولات خودتان را ویرایش کنید.",
+                    statusCode: StatusCodes.Status403Forbidden);
+
+            var res = await _productUpdaterService.UpdateProductAsync(id, request);
+            return Ok(res);
+        }
+
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> DeleteProduct(Guid id)
+        {
+            var product = await _productGetterService.GetProductByIdAsync(id);
+            if (product == null)
+                return Problem("هیچ محصولی با آیدی داده شده یافت نشد", statusCode: StatusCodes.Status404NotFound);
+
+            if (product.ManufactureEmail != User.Identity.Name)
+                return Problem("شما فقط میتوانید محصولات خودتان را حذف کنید.",
+            
+                    statusCode: StatusCodes.Status403Forbidden);
+
+            var res = await _productDeleterService.DeleteProductAsync(id);
+            if(!res)
+                return Ok(false);
+            return Ok(true);
+        }
+
 
 
 
