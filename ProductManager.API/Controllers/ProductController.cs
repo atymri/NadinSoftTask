@@ -1,0 +1,43 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ProductManager.Core.DTOs.ProductDTOs;
+using ProductManager.Core.ServiceContracts;
+
+namespace ProductManager.API.Controllers
+{
+    [AllowAnonymous]
+    public class ProductController : BaseController
+    {
+        private readonly IProductGetterService _productGetterService;
+        private readonly IProductAdderService _productAdderService;
+        private readonly IProductUpdaterService _productUpdaterService;
+        private readonly IProductDeleterService _productDeleterService;
+
+        public ProductController(IProductGetterService getterService, IProductAdderService adderService, 
+            IProductUpdaterService productUpdaterService, IProductDeleterService productDeleterService)
+        {
+            _productGetterService = getterService;
+            _productAdderService = adderService;
+            _productUpdaterService = productUpdaterService;
+            _productDeleterService = productDeleterService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<ProductResponse>>> GetAllProducts()
+        {
+            var products = await _productGetterService.GetAllProductsAsync();
+            return Ok(products);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ProductResponse>> GetProductById(Guid id)
+        {
+            var product = await _productGetterService.GetProductByIdAsync(id);
+            return Ok(product);
+        }
+
+
+
+
+    }
+}

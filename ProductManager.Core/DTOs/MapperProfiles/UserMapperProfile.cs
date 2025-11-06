@@ -15,6 +15,7 @@ namespace ProductManager.Core.DTOs.MapperProfiles
         {
             CreateMap<RegisterRequest, User>();
             CreateMap<LoginRequest, User>();
+            CreateMap<User, UserResponse>();
         }
     }
 }
