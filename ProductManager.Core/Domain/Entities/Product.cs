@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace ProductManager.Core.Domain.Entities
 {
     public class Product
     {
-        [Key] 
+        [Key]
+        [BsonId]
+        [BsonRepresentation(BsonType.String)]
         public Guid ID { get; set; } = Guid.NewGuid();
 
         [Required]

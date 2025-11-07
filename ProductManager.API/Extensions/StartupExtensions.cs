@@ -25,6 +25,20 @@ namespace ProductManager.API.Extensions
             builder.Services.AddScoped<IProductDeleterService, ProductDeleterService>();
             builder.Services.AddTransient<IJwtService, JwtService>();
 
+            var mongoConfig = builder.Configuration.GetSection("MongoDbSettings");
+            var mongoConnection = mongoConfig["ConnectionString"]
+                                  ?? throw new KeyNotFoundException("Mongo connection string is missing!!!!!");
+            var mongoDatabase = mongoConfig["DatabaseName"]
+                                ?? throw new KeyNotFoundException("Mongo database name is missing!!!!!");
+
+            builder.Services.AddSingleton(sp =>
+            {
+                var context = new MongoDbContext(mongoConnection, mongoDatabase);
+                context.EnsureIndexes(); 
+                return context;
+            });
+
+
             builder.Services.AddAutoMapper(cfg =>
             {
                 cfg.AddMaps(typeof(ProductMapperProfile).Assembly);
@@ -88,7 +102,7 @@ namespace ProductManager.API.Extensions
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-                    Description = "توکن را به شکل زیر وارد کنید: \n\nBearer {your_token}"
+                    Description = "توکن را به شکل زیر وارد کنید: \n {your_token}"
                 });
 
                 options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
