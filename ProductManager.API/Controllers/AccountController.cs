@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ProductManager.API.Filters.ActionFilters;
 using ProductManager.Core.Domain.Entities;
 using ProductManager.Core.DTOs.UserDTOs;
+using ProductManager.Core.ServiceContracts;
 
 namespace ProductManager.API.Controllers
 {
@@ -15,12 +15,16 @@ namespace ProductManager.API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
-
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper)
+        private readonly IJwtService _jwtService;
+        public AccountController(UserManager<User> userManager, 
+            SignInManager<User> signInManager, 
+            IMapper mapper,
+            IJwtService jwtService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         [HttpPost("register")]
@@ -42,9 +46,9 @@ namespace ProductManager.API.Controllers
                     statusCode: StatusCodes.Status400BadRequest);
 
             await _signInManager.SignInAsync(user, false);
+            var authResponse = _jwtService.CreateToken(user);
 
-            var userResponse = _mapper.Map<UserResponse>(user);
-            return Ok(userResponse);
+            return Ok(authResponse);
         }
 
         [HttpPost("login")]
@@ -62,9 +66,9 @@ namespace ProductManager.API.Controllers
             if (!res.Succeeded)
                 return Problem("ایمیل یا رمز عبور معتبر نیست");
 
-            var userResponse = _mapper.Map<UserResponse>(user);
+            var authResponse = _jwtService.CreateToken(user);
 
-            return Ok(userResponse);
+            return Ok(authResponse);
 
         }
 
@@ -74,6 +78,24 @@ namespace ProductManager.API.Controllers
             await _signInManager.SignOutAsync();
             return NoContent();
         }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAcount(string email, string password)
+        {
+            if (User.Identity.Name != email.Trim())
+                return Problem("شما فقط میتوانید حساب کاربری خودتان را حذف کنید", 
+                    statusCode: StatusCodes.Status401Unauthorized);
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (!await _userManager.CheckPasswordAsync(user, password))
+                return Problem("رمز عبور درست نیست",
+                    statusCode: StatusCodes.Status400BadRequest);
+
+            await _userManager.DeleteAsync(user);
+            return NoContent();
+        }
+        
 
         [HttpGet("register-email-check")]
         [TypeFilter(typeof(AjaxOnlyActionFilter))]

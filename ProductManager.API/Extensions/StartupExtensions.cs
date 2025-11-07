@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ProductManager.Core.Domain.Entities;
 using ProductManager.Core.Domain.RepositoryContracts;
 using ProductManager.Core.DTOs.MapperProfiles;
@@ -21,6 +23,7 @@ namespace ProductManager.API.Extensions
             builder.Services.AddScoped<IProductAdderService, ProductAdderService>();
             builder.Services.AddScoped<IProductUpdaterService, ProductUpdaterService>();
             builder.Services.AddScoped<IProductDeleterService, ProductDeleterService>();
+            builder.Services.AddTransient<IJwtService, JwtService>();
 
             builder.Services.AddAutoMapper(cfg =>
             {
@@ -42,16 +45,29 @@ namespace ProductManager.API.Extensions
                 .AddDefaultTokenProviders()
                 .AddErrorDescriber<PersianIdentityErrorDescriber>();
 
-            builder.Services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Account/Login";
-                options.LogoutPath = "/Account/Logout";
-            });
-
             builder.Services.AddControllers(options =>
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
+            });
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                };
             });
 
             var connectionString = builder.Configuration.GetConnectionString("Default") ??

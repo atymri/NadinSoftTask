@@ -43,6 +43,10 @@ namespace ProductManager.API.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
+            if (!User.Identity.IsAuthenticated)
+                return Problem("برای افزودن محصول ابتدا وارد حساب کاربری خود شوید",
+                    statusCode: StatusCodes.Status401Unauthorized);
+
             if (request.ManufactureEmail != User.Identity.Name)
                 return Problem("شما فقط میتوانید برای خودتان محصول اضافه کنید",
                     statusCode: StatusCodes.Status403Forbidden);
@@ -57,6 +61,10 @@ namespace ProductManager.API.Controllers
         {
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
+
+            if (!User.Identity.IsAuthenticated)
+                return Problem("برای افزودن محصول ابتدا وارد حساب کاربری خود شوید",
+                    statusCode: StatusCodes.Status401Unauthorized);
 
             if (request.ManufactureEmail != User.Identity.Name)
                 return Problem("شما فقط میتوانید محصولات خودتان را ویرایش کنید.",
@@ -73,6 +81,10 @@ namespace ProductManager.API.Controllers
             var product = await _productGetterService.GetProductByIdAsync(id);
             if (product == null)
                 return Problem("هیچ محصولی با آیدی داده شده یافت نشد", statusCode: StatusCodes.Status404NotFound);
+
+            if (!User.Identity.IsAuthenticated)
+                return Problem("برای افزودن محصول ابتدا وارد حساب کاربری خود شوید",
+                    statusCode: StatusCodes.Status401Unauthorized);
 
             if (product.ManufactureEmail != User.Identity.Name)
                 return Problem("شما فقط میتوانید محصولات خودتان را حذف کنید.",
