@@ -22,6 +22,20 @@ namespace ProductManager.API.Controllers
             _productDeleterService = productDeleterService;
         }
 
+        [Authorize]
+        [HttpGet("debug")]
+        public IActionResult Debug()
+        {
+            return Ok(new
+            {
+                IsAuthenticated = User.Identity.IsAuthenticated,
+                Name = User.Identity.Name,
+                Claims = User.Claims.Select(c => new { c.Type, c.Value })
+            });
+        }
+
+
+
         [HttpGet]
         public async Task<ActionResult<List<ProductResponse>>> GetAllProducts()
         {
@@ -36,6 +50,18 @@ namespace ProductManager.API.Controllers
             return Ok(product);
         }
 
+        [HttpGet("get-product-by/{manufactureEmail}")]
+        public async Task<ActionResult<List<ProductResponse>>> GetProductByManufacture(string manufactureEmail)
+        {
+            if (string.IsNullOrEmpty(manufactureEmail))
+                return Problem("ایمیل فروشنده را وارد کنید!", 
+                    statusCode: StatusCodes.Status400BadRequest);
+
+            var products = await _productGetterService.GetProductsByManufactureAsync(manufactureEmail);
+
+            return Ok(products);
+        }
+
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<ProductResponse>> PostProduct(ProductAddRequest request)
@@ -43,7 +69,7 @@ namespace ProductManager.API.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
-            if (!User.Identity.IsAuthenticated)
+            if (User.Identity is not { IsAuthenticated: true })
                 return Problem("برای افزودن محصول ابتدا وارد حساب کاربری خود شوید",
                     statusCode: StatusCodes.Status401Unauthorized);
 

@@ -25,7 +25,6 @@ namespace ProductManager.Core.Services
 
             ValidationHelper.Validate(request);
             ValidationHelper.ValidateEmail(request.ManufactureEmail);
-            
 
             var product = _mapper.Map<Product>(request);
             var response = await _productRepository.AddProductAsync(product);

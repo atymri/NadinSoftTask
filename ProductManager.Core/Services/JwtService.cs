@@ -28,9 +28,11 @@ namespace ProductManager.Core.Services
             var claims = new Claim[]
             {
                 new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new (JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                new (JwtRegisteredClaimNames.Iat,
+                    DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(),
+                    ClaimValueTypes.Integer64),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new (JwtRegisteredClaimNames.Email, user.Email)
+                new (ClaimTypes.Name, user.Email)
             };
 
             var signInCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
